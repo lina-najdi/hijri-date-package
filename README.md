@@ -28,7 +28,7 @@ php artisan vendor:publish --tag=hijri-config
 
 The Islamic calendar relies on physical moon sightings, which vary by country. Open the newly published config/hijri.php file and set your desired adjustment:
 
-```bash
+```php
 // config/hijri.php
 
 return [
@@ -40,7 +40,7 @@ return [
 
 Using the Carbon Macro (Recommended):
 
-```bash
+```php
 use Illuminate\Support\Carbon;
 
 // Automatically converts today's date
@@ -52,7 +52,7 @@ echo Carbon::parse('2024-01-01')->toHijri();
 
 Using the Facade:
 
-```bash
+```php
 use Lina\HijriDate\Facades\Hijri;
 
 // Converts today's date
