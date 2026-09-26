@@ -3,14 +3,62 @@
 A simple, standalone Laravel package to convert Gregorian dates to Hijri dates using pure PHP (no external C-extensions required).
 
 **🚀 Features:**
-* **Standalone Mathematical Conversion:** The package relies on pure PHP (the Kuwaiti algorithm) and does not require the `ext-calendar` extension to be enabled on your server, ensuring it works seamlessly in any hosting environment.
-* **Easy-to-use Facade:** Convert dates instantly anywhere in your application using `Hijri::convertToHijri()`.
-* **Carbon Macro Support:** Deep integration with Carbon allows you to fluently call methods like `now()->toHijri()`.
-* **Day Adjustment:** Easily add or subtract days from the calculation to match your local Hijri calendar and moon sighting.
+* **Standalone Mathematical Conversion:** Relies on pure PHP , ensuring it works seamlessly in any hosting environment without `ext-calendar`.
+* **Global Regional Configuration:** Automatically adjust dates for your local moon sighting across your entire application.
+* **Easy-to-use Facade & Carbon Macro:** Deep integration allows fluent conversions like `now()->toHijri()`.
 
-## 🛠 Installation
+## 🛠 Getting Started
 
-You can install the package via composer:
+Follow these 4 simple steps to install and use the package in your Laravel project.
 
+### Step 1: Install the Package
+Download the package into your project using Composer:
 ```bash
 composer require lina/hijri-date
+
+
+```
+### Step 2: Publish the Configuration File
+
+publish the configuration file to your app's main config/ directory:
+```bash
+php artisan vendor:publish --tag=hijri-config
+```
+### Step 3: Set the Regional Adjustment
+
+The Islamic calendar relies on physical moon sightings, which vary by country. Open the newly published config/hijri.php file and set your desired adjustment:
+
+```bash
+// config/hijri.php
+
+return [
+    'adjustment' => 2, // Example: +2 for Saudi Arabia (Umm al-Qura)
+];
+```
+
+### Step 4: Start Converting Dates
+
+Using the Carbon Macro (Recommended):
+
+```bash
+use Illuminate\Support\Carbon;
+
+// Automatically converts today's date
+echo now()->toHijri(); 
+
+// Converts a specific date
+echo Carbon::parse('2024-01-01')->toHijri();
+```
+
+Using the Facade:
+
+```bash
+use Lina\HijriDate\Facades\Hijri;
+
+// Converts today's date
+echo Hijri::convertToHijri();
+
+// Converts a specific date
+echo Hijri::convertToHijri('2024-01-01');
+```
+
