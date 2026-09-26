@@ -6,13 +6,15 @@ use Illuminate\Support\Carbon;
 
 class Hijri
 {
-    public function convertToHijri($date = null, int $adjustment = 0): string
+    public function convertToHijri($date = null, ?int $adjustment = null): string
     {
-        // Parse the date and apply the adjustment in days before conversion
         $carbonDate = $date ? Carbon::parse($date) : Carbon::now();
-        
-        if ($adjustment !== 0) {
-            $carbonDate->addDays($adjustment);
+
+        // Use the manual adjustment if provided; otherwise, read from config/hijri.php
+        $finalAdjustment = $adjustment ?? config('hijri.adjustment', 0);
+
+        if ($finalAdjustment !== 0) {
+            $carbonDate->addDays($finalAdjustment);
         }
 
         $y = $carbonDate->year;
@@ -32,11 +34,11 @@ class Hijri
         $l = $l - 10631 * $n + 354;
         $j = ((int)((10985 - $l) / 5316)) * ((int)((50 * $l) / 17719)) + ((int)($l / 5670)) * ((int)((43 * $l) / 15238));
         $l = $l - ((int)((30 - $j) / 15)) * ((int)((17719 * $j) / 50)) - ((int)($j / 16)) * ((int)((15238 * $j) / 43)) + 29;
-        
+
         $month = (int)((24 * $l) / 709);
         $day = $l - (int)((709 * $month) / 24);
         $year = 30 * $n + $j - 30;
-        
+
         return sprintf('%04d-%02d-%02d', $year, $month, $day);
     }
 }

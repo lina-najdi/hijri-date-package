@@ -10,6 +10,8 @@ class HijriDateServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/hijri.php', 'hijri');
+
         $this->app->singleton('hijri', function ($app) {
             return new \Lina\HijriDate\Hijri();
         });
@@ -17,8 +19,11 @@ class HijriDateServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // Allow passing an adjustment to the macro
-        Carbon::macro('toHijri', function (int $adjustment = 0) {
+        $this->publishes([
+            __DIR__.'/../config/hijri.php' => config_path('hijri.php'),
+        ], 'hijri-config');
+
+        Carbon::macro('toHijri', function (?int $adjustment = null) {
             return Hijri::convertToHijri($this, $adjustment);
         });
     }
